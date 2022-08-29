@@ -13,7 +13,6 @@ app.post('/sign-up', (req, res) => {
 });
 
 app.post('/tweets', function (req, res) {
-
     tweets.push({
         ...req.body,
         id: tweets.length+1
@@ -27,14 +26,22 @@ app.get('/tweets', function (req, res) {
     let lastTweets = [];
 
     if (tweets.length <= tweetsShown) {
-        lastTweets = tweets;
+        for (let i = 0; lastTweets.length < tweets.length; i++) {
+            const userAvatar = users.find(user => user.username === tweets[i].username).avatar;
+            lastTweets.push({
+                ...tweets[i],
+                avatar: userAvatar
+            });
+        }
     } else {
-        console.log(tweets.length)
         for (let i = tweets.length-tweetsShown; lastTweets.length !== tweetsShown; i++) {
-            lastTweets.push(tweets[i]);
+            const userAvatar = users.find(user => user.username === tweets[i].username).avatar;
+            lastTweets.push({
+                ...tweets[i],
+                avatar: userAvatar
+            });
         }
     }
-    console.log(lastTweets)
     res.send(lastTweets);
 });
 
