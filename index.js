@@ -1,7 +1,9 @@
 import express from 'express';
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const users = [];
 const tweets = [];
@@ -9,7 +11,6 @@ const tweets = [];
 app.post('/sign-up', (req, res) => {
     users.push(req.body);
     res.send('OK');
-    console.log(users)
 });
 
 app.post('/tweets', function (req, res) {
@@ -18,30 +19,20 @@ app.post('/tweets', function (req, res) {
         id: tweets.length+1
     });
     res.send('OK');
-    console.log(tweets)
 });
 
 app.get('/tweets', function (req, res) {
-    const tweetsShown = 10;
     let lastTweets = [];
+    const tweetsShown = 10;
+    const renderLimit = (tweetsShown > tweets.length ? tweets.length : tweetsShown);
 
-    if (tweets.length <= tweetsShown) {
-        for (let i = 0; lastTweets.length < tweets.length; i++) {
-            const userAvatar = users.find(user => user.username === tweets[i].username).avatar;
-            lastTweets.push({
-                ...tweets[i],
-                avatar: userAvatar
-            });
-        }
-    } else {
-        for (let i = tweets.length-tweetsShown; lastTweets.length !== tweetsShown; i++) {
-            const userAvatar = users.find(user => user.username === tweets[i].username).avatar;
-            lastTweets.push({
-                ...tweets[i],
-                avatar: userAvatar
-            });
-        }
-    }
+    for (let i = tweets.length-1; lastTweets.length < renderLimit; i--) {
+        const userAvatar = users.find(user => user.username === tweets[i].username).avatar;
+        lastTweets.push({
+            ...tweets[i],
+            avatar: userAvatar
+        });
+    };
     res.send(lastTweets);
 });
 
