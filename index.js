@@ -18,7 +18,7 @@ app.post('/sign-up', (req, res) => {
         res.status(201).send('OK');
     } else {
         res.status(400).send('Todos os campos são obrigatórios');
-    };
+    }
 });
 
 app.post('/tweets', function (req, res) {
@@ -31,8 +31,7 @@ app.post('/tweets', function (req, res) {
         res.status(201).send('OK');
     } else {
         res.status(400).send('Todos os campos são obrigatórios');
-    };
-    console.log(allTweets)
+    }
 });
 
 app.get('/tweets', function (req, res) {
@@ -51,8 +50,7 @@ app.get('/tweets', function (req, res) {
             ...tweets[i],
             avatar: userAvatar
         });
-    };
-    
+    }
     res.send(lastTweets);
 });
 
